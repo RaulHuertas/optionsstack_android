@@ -4,3 +4,6 @@
 - [x] Update `activity_main.xml` to use `OptionButtonView`
 - [x] Update `MainActivity.kt` to use `OptionButtonView`
 - [x] Verify build and functionality
+- [x] Group buttons into `optionsGrid` in `activity_main.xml`
+- [x] Center `optionsGrid` in `activity_main.xml`
+- [x] Verify build and layout

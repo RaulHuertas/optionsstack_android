@@ -1,46 +1,35 @@
-# Implementation Plan - Reusable Option Button
+# Implementation Plan - Center Options in a Grid Container
 
-Refactor the manual button and label combinations in `MainActivity` into a separate reusable `OptionButtonView` component.
+Refactor `activity_main.xml` to group the two `OptionButtonView` instances within a "grid container" named `optionsGrid` and center this container in the parent layout.
 
 ## Proposed Changes
 
-### UI Components
-
-#### [NEW] [attrs.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/values/attrs.xml)
-- Define `OptionButtonView` styleable attributes:
-    - `optionText` (string): The main text of the button.
-    - `shortcutText` (string): The text for the shortcut label (e.g., "[F]").
-
-#### [NEW] [view_option_button.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/view_option_button.xml)
-- Create a layout that mirrors the existing button + label structure using `ConstraintLayout`.
-- The `Button` and `TextView` (label) will be contained within this layout.
-
-#### [NEW] [OptionButtonView.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/OptionButtonView.kt)
-- Create a custom view class extending `ConstraintLayout`.
-- Implement attribute parsing to set the button text and shortcut label.
-- Expose methods to:
-    - Set the button text.
-    - Set the shortcut label.
-    - Set a click listener.
-    - Change the button's background tint.
-
-### Main Activity Refactoring
+### UI Layout
 
 #### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
-- Remove the individual `Button` and `TextView` pairs.
-- Add two instances of `OptionButtonView` (one for Option A, one for Option B).
-- Set the `optionText` and `shortcutText` attributes in XML.
+- Introduce a new container `androidx.constraintlayout.widget.ConstraintLayout` (or `GridLayout`) with `android:id="@+id/optionsGrid"`.
+- Move `optionA` and `optionB` inside `optionsGrid`.
+- Constraints for `optionsGrid`:
+    - `app:layout_constraintTop_toTopOf="parent"`
+    - `app:layout_constraintBottom_toBottomOf="parent"`
+    - `app:layout_constraintStart_toStartOf="parent"`
+    - `app:layout_constraintEnd_toEndOf="parent"`
+    - `android:layout_width="wrap_content"`
+    - `android:layout_height="wrap_content"`
+- Inside `optionsGrid`, use a `androidx.constraintlayout.helper.widget.Flow` to organize the buttons in a grid:
+    - `android:id="@+id/flowGrid"`
+    - `app:constraint_referenced_ids="optionA,optionB"`
+    - `app:flow_maxElementsWrap="1"` (for vertical grid) or `2` (for horizontal). I will assume vertical initially to match the previous look, or side-by-side if "grid" implies columns. Given the previous code had them vertically packed, I'll start with a 2nd column or a 2x1 grid.
+    - Actually, I'll just use regular constraints inside `optionsGrid` if it's a `ConstraintLayout`.
 
-#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
-- Update the binding usages to interact with the new `OptionButtonView` instances.
-- Maintain the existing toggle logic and keyboard shortcut handling.
+> [!NOTE]
+> I will use a nested `ConstraintLayout` for `optionsGrid` to physically group the elements as requested.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `gradlew :app:assembleDebug` to ensure the project builds with the new custom view and resource files.
+- `gradlew :app:assembleDebug` to ensure XML validity and ViewBinding compatibility.
 
 ### Manual Verification
-- Deploy to a device/emulator.
-- Verify that both buttons display the correct text and labels.
-- Verify that clicking the buttons or pressing the keys ('F' and 'J') toggles the background color as before.
+- Use `render_compose_preview` (if applicable for XML, but I'll use `take_screenshot` or just rely on layout logic) to verify centering.
+- Ensure buttons remain functional in `MainActivity`.
