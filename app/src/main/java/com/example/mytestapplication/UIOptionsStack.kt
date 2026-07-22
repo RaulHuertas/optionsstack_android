@@ -1,7 +1,7 @@
 package com.example.mytestapplication
 
 class UIOptionsStack {
-    ///var options: UIOptions = UIOptions()
+    var options : List<UIOptions> = emptyList()
     var stackPositions: List<Int> = emptyList()
 
     companion object {

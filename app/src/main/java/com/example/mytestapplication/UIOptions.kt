@@ -1,8 +1,12 @@
 package com.example.mytestapplication
 
-class UIOptions(
-    val options: List<UIOption>
-) {
-    val associations: Map<UIOption, String> = options.associateWith { "" }
-
+enum class OptionsType{
+    Final,
+    List
+}
+class UIOptions{
+    private var displayName: String = ""
+    //When this option is selected, the stack calls the executioner with 'internalName' as parameter
+    private var internalName : String = ""
+    private var options: List<UIOptions> = emptyList()
 }
