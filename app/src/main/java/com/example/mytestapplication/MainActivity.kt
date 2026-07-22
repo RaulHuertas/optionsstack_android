@@ -37,11 +37,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
-            KeyEvent.KEYCODE_F -> {
+            KeyEvent.KEYCODE_R -> {
                 binding.optionA.invertColors()
                 true
             }
-            KeyEvent.KEYCODE_J -> {
+            KeyEvent.KEYCODE_U -> {
                 binding.optionB.invertColors()
                 true
             }
@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
-            KeyEvent.KEYCODE_F -> {
+            KeyEvent.KEYCODE_R -> {
                 binding.optionA.restoreColors()
                 true
             }
-            KeyEvent.KEYCODE_J -> {
+            KeyEvent.KEYCODE_U -> {
                 binding.optionB.restoreColors()
                 true
             }
