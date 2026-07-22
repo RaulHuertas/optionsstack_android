@@ -1,2 +1,6 @@
-- [x] Add `associations` map to `UIOptions` class
-- [x] Verify build
+- [x] Create `attrs.xml` for custom attributes
+- [x] Create `view_option_button.xml` layout
+- [x] Create `OptionButtonView.kt` custom view class
+- [x] Update `activity_main.xml` to use `OptionButtonView`
+- [x] Update `MainActivity.kt` to use `OptionButtonView`
+- [x] Verify build and functionality

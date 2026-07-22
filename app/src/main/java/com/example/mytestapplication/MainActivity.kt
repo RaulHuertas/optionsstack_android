@@ -17,11 +17,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonOptionA.setOnClickListener {
+        binding.optionA.setOnClickListener {
             toggleOptionA()
         }
 
-        binding.buttonOptionB.setOnClickListener {
+        binding.optionB.setOnClickListener {
             toggleOptionB()
         }
     }
@@ -43,12 +43,12 @@ class MainActivity : AppCompatActivity() {
     private fun toggleOptionA() {
         isOptionAMatcha = !isOptionAMatcha
         val colorRes = if (isOptionAMatcha) R.color.matcha else R.color.white
-        binding.buttonOptionA.backgroundTintList = ContextCompat.getColorStateList(this, colorRes)
+        binding.optionA.setButtonBackgroundTint(ContextCompat.getColorStateList(this, colorRes))
     }
 
     private fun toggleOptionB() {
         isOptionBMaroon = !isOptionBMaroon
         val colorRes = if (isOptionBMaroon) R.color.maroon else R.color.white
-        binding.buttonOptionB.backgroundTintList = ContextCompat.getColorStateList(this, colorRes)
+        binding.optionB.setButtonBackgroundTint(ContextCompat.getColorStateList(this, colorRes))
     }
 }
