@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
 import com.example.mytestapplication.databinding.ViewOptionButtonBinding
 
 class OptionButtonView @JvmOverloads constructor(
@@ -44,8 +45,8 @@ class OptionButtonView @JvmOverloads constructor(
     private fun applyColors() {
         binding.buttonOption.setTextColor(optionTextColor)
         binding.labelShortcut.setTextColor(optionTextColor)
-        binding.buttonOption.backgroundTintList = ColorStateList.valueOf(optionBackgroundColor)
-        binding.labelShortcut.backgroundTintList = ColorStateList.valueOf(optionBackgroundColor)
+        ViewCompat.setBackgroundTintList(binding.buttonOption, ColorStateList.valueOf(optionBackgroundColor))
+        ViewCompat.setBackgroundTintList(binding.labelShortcut, ColorStateList.valueOf(optionBackgroundColor))
     }
 
     fun getOptionBackgroundColor(): Int = optionBackgroundColor
@@ -86,10 +87,6 @@ class OptionButtonView @JvmOverloads constructor(
         binding.buttonOption.setOnClickListener(l)
     }
 
-    fun setButtonBackgroundTint(colorStateList: ColorStateList?) {
-        binding.buttonOption.backgroundTintList = colorStateList
-    }
-
     fun invertColors() {
         if (isCurrentlyInverted) return
         isCurrentlyInverted = true
@@ -99,8 +96,8 @@ class OptionButtonView @JvmOverloads constructor(
 
         binding.buttonOption.setTextColor(invertedText)
         binding.labelShortcut.setTextColor(invertedText)
-        binding.buttonOption.backgroundTintList = ColorStateList.valueOf(invertedBg)
-        binding.labelShortcut.backgroundTintList = ColorStateList.valueOf(invertedBg)
+        ViewCompat.setBackgroundTintList(binding.buttonOption, ColorStateList.valueOf(invertedBg))
+        ViewCompat.setBackgroundTintList(binding.labelShortcut, ColorStateList.valueOf(invertedBg))
     }
 
     private fun invertColor(color: Int): Int {

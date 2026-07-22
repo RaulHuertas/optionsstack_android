@@ -8,10 +8,8 @@
         android:id="@+id/buttonOption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
         android:padding="12dp"
         android:textAllCaps="false"
-        android:textColor="@color/black"
         android:textSize="24sp"
         android:minWidth="48dp"
         android:minHeight="48dp"
@@ -19,7 +17,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Option Text" />
+        tools:text="Option Text"
+        tools:backgroundTint="@color/white"
+        tools:textColor="@color/black" />
 
     <TextView
         android:id="@+id/labelShortcut"
@@ -28,12 +28,12 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:elevation="4dp"
-        android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="@id/buttonOption"
         app:layout_constraintEnd_toEndOf="@id/buttonOption"
-        tools:text="[F]" />
+        tools:text="[F]"
+        tools:textColor="@color/black" />
 
 </merge>
