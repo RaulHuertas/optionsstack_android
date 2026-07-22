@@ -1,35 +1,38 @@
-# Implementation Plan - Center Options in a Grid Container
+# Implementation Plan - Dynamic Grid Option Addition
 
-Refactor `activity_main.xml` to group the two `OptionButtonView` instances within a "grid container" named `optionsGrid` and center this container in the parent layout.
+Add a button to `MainActivity` that dynamically adds new `OptionButtonView` instances into `optionsGrid`, which will be configured as a 3-column grid.
 
 ## Proposed Changes
 
 ### UI Layout
 
 #### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
-- Introduce a new container `androidx.constraintlayout.widget.ConstraintLayout` (or `GridLayout`) with `android:id="@+id/optionsGrid"`.
-- Move `optionA` and `optionB` inside `optionsGrid`.
-- Constraints for `optionsGrid`:
-    - `app:layout_constraintTop_toTopOf="parent"`
-    - `app:layout_constraintBottom_toBottomOf="parent"`
-    - `app:layout_constraintStart_toStartOf="parent"`
-    - `app:layout_constraintEnd_toEndOf="parent"`
-    - `android:layout_width="wrap_content"`
-    - `android:layout_height="wrap_content"`
-- Inside `optionsGrid`, use a `androidx.constraintlayout.helper.widget.Flow` to organize the buttons in a grid:
-    - `android:id="@+id/flowGrid"`
-    - `app:constraint_referenced_ids="optionA,optionB"`
-    - `app:flow_maxElementsWrap="1"` (for vertical grid) or `2` (for horizontal). I will assume vertical initially to match the previous look, or side-by-side if "grid" implies columns. Given the previous code had them vertically packed, I'll start with a 2nd column or a 2x1 grid.
-    - Actually, I'll just use regular constraints inside `optionsGrid` if it's a `ConstraintLayout`.
+- Change `optionsGrid` from `ConstraintLayout` to `android.widget.GridLayout`.
+    - Set `android:columnCount="3"`.
+    - Set `android:alignmentMode="alignBounds"`.
+    - Set `android:useDefaultMargins="true"`.
+- Add a new `Button` with ID `btnAddDynamic` at the bottom of the screen, outside `optionsGrid`.
+
+### Activity Logic
+
+#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
+- Set up a click listener for `binding.btnAddDynamic`.
+- In the listener:
+    1. Instantiate `OptionButtonView`.
+    2. Set layout parameters for `GridLayout`.
+    3. Call `setOptionText("Dynamic")` and `setShortcutText("[dy]")`.
+    4. Add the view to `binding.optionsGrid`.
 
 > [!NOTE]
-> I will use a nested `ConstraintLayout` for `optionsGrid` to physically group the elements as requested.
+> Since `GridLayout` is used, the buttons will automatically wrap after 3 items. I will ensure they are properly sized to fit.
 
 ## Verification Plan
 
 ### Automated Tests
-- `gradlew :app:assembleDebug` to ensure XML validity and ViewBinding compatibility.
+- `gradlew :app:assembleDebug` to ensure the build remains stable.
 
 ### Manual Verification
-- Use `render_compose_preview` (if applicable for XML, but I'll use `take_screenshot` or just rely on layout logic) to verify centering.
-- Ensure buttons remain functional in `MainActivity`.
+- Launch the app.
+- Click "Add Dynamic" multiple times.
+- Verify that buttons are added in a grid format with a maximum of 3 columns.
+- Verify that the grid remains centered in the screen.

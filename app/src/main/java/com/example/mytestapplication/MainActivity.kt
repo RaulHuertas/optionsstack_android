@@ -24,6 +24,22 @@ class MainActivity : AppCompatActivity() {
         binding.optionB.setOnClickListener {
             toggleOptionB()
         }
+
+        binding.btnAddDynamic.setOnClickListener {
+            addDynamicOption()
+        }
+    }
+
+    private fun addDynamicOption() {
+        val dynamicOption = OptionButtonView(this).apply {
+            layoutParams = android.widget.GridLayout.LayoutParams().apply {
+                width = resources.getDimensionPixelSize(R.dimen.option_button_width)
+                height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT
+            }
+            setOptionText("Dynamic")
+            setShortcutText("[dy]")
+        }
+        binding.optionsGrid.addView(dynamicOption)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {

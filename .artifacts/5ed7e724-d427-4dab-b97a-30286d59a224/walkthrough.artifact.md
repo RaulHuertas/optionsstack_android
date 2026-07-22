@@ -1,27 +1,42 @@
-# Walkthrough - centered Grid Container for Options
+# Walkthrough - Dynamic 3-Column Grid for Options
 
-I have updated the layout to group the option buttons within a centered container called `optionsGrid`.
+I have updated the layout and logic to support a dynamic grid of option buttons, limited to 3 columns.
 
 ## Changes Made
 
-### UI Layout
+### UI Layout Updates
 
 #### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
-- Wrapped the `OptionButtonView` instances in a new `ConstraintLayout` with the ID `optionsGrid`.
-- Added constraints to `optionsGrid` to center it vertically and horizontally within the main layout.
-- Set a fixed width of `200dp` for the buttons inside the grid to ensure a consistent appearance.
+- Replaced the nested `ConstraintLayout` for `optionsGrid` with a `android.widget.GridLayout`.
+- Configured `GridLayout` with `android:columnCount="3"` and `android:useDefaultMargins="true"`.
+- Added a "Add Dynamic" button (`btnAddDynamic`) below the grid.
+- Used a new dimension resource `@dimen/option_button_width` for consistent button widths.
 
-```xml
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/optionsGrid"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-    <!-- Buttons inside -->
-</androidx.constraintlayout.widget.ConstraintLayout>
+#### [NEW] [dimens.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/values/dimens.xml)
+- Defined `option_button_width` as `150dp`.
+
+### Activity Logic Updates
+
+#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
+- Added a click listener for `btnAddDynamic`.
+- Implemented `addDynamicOption()` which:
+    - Instantiates a new `OptionButtonView`.
+    - Sets its width using the shared dimension.
+    - Configures it with "Dynamic" text and "[dy]" shortcut.
+    - Adds it to the `GridLayout`.
+
+```kotlin
+private fun addDynamicOption() {
+    val dynamicOption = OptionButtonView(this).apply {
+        layoutParams = android.widget.GridLayout.LayoutParams().apply {
+            width = resources.getDimensionPixelSize(R.dimen.option_button_width)
+            height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT
+        }
+        setOptionText("Dynamic")
+        setShortcutText("[dy]")
+    }
+    binding.optionsGrid.addView(dynamicOption)
+}
 ```
 
 ## Verification Results
@@ -30,5 +45,6 @@ I have updated the layout to group the option buttons within a centered containe
 - Ran `gradlew :app:assembleDebug`: **SUCCESS**
 
 ### Manual Verification
-- Verified that `optionsGrid` correctly centers its children in the parent layout.
-- Confirmed that the buttons maintain their functionality (clicks and keyboard shortcuts) as ViewBinding automatically handles the nested IDs.
+- Verified the `GridLayout` structure correctly wraps items after 3 columns.
+- Confirmed that clicking "Add Dynamic" injects new buttons into the centered grid.
+- Confirmed that the `btnAddDynamic` button stays positioned below the grid.

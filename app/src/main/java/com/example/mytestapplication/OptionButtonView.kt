@@ -25,6 +25,7 @@ class OptionButtonView @JvmOverloads constructor(
             try {
                 binding.buttonOption.text = getString(R.styleable.OptionButtonView_optionText)
                 binding.labelShortcut.text = getString(R.styleable.OptionButtonView_shortcutText)
+                updateContentDescription()
             } finally {
                 recycle()
             }
@@ -33,10 +34,18 @@ class OptionButtonView @JvmOverloads constructor(
 
     fun setOptionText(text: String) {
         binding.buttonOption.text = text
+        updateContentDescription()
     }
 
     fun setShortcutText(text: String) {
         binding.labelShortcut.text = text
+        updateContentDescription()
+    }
+
+    private fun updateContentDescription() {
+        val optionText = binding.buttonOption.text ?: ""
+        val shortcutText = binding.labelShortcut.text ?: ""
+        binding.buttonOption.contentDescription = "$optionText, shortcut $shortcutText"
     }
 
     override fun setOnClickListener(l: OnClickListener?) {

@@ -3,41 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="8dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <GridLayout
         android:id="@+id/optionsGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:columnCount="2"
+        android:useDefaultMargins="true"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddDynamic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <com.example.mytestapplication.OptionButtonView
             android:id="@+id/optionA"
-            android:layout_width="200dp"
+            android:layout_width="@dimen/option_button_width"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/optionB"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
             app:optionText="OptionA"
             app:shortcutText="[F]" />
 
         <com.example.mytestapplication.OptionButtonView
             android:id="@+id/optionB"
-            android:layout_width="200dp"
+            android:layout_width="@dimen/option_button_width"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/optionA"
             app:optionText="OptionB"
             app:shortcutText="[J]" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </GridLayout>
+
+    <Button
+        android:id="@+id/btnAddDynamic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Add Dynamic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/optionsGrid" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

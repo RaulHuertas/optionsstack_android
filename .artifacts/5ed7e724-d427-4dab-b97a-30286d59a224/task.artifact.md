@@ -7,3 +7,7 @@
 - [x] Group buttons into `optionsGrid` in `activity_main.xml`
 - [x] Center `optionsGrid` in `activity_main.xml`
 - [x] Verify build and layout
+- [x] Change `optionsGrid` to `GridLayout` in `activity_main.xml`
+- [x] Add `btnAddDynamic` button to `activity_main.xml`
+- [x] Implement dynamic view addition in `MainActivity.kt`
+- [x] Verify 3-column grid behavior
