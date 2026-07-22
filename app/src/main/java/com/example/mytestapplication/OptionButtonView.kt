@@ -2,6 +2,7 @@ package com.example.mytestapplication
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +17,11 @@ class OptionButtonView @JvmOverloads constructor(
     private val binding: ViewOptionButtonBinding =
         ViewOptionButtonBinding.inflate(LayoutInflater.from(context), this)
 
+    private var optionBackgroundColor: Int = Color.WHITE
+    private var optionTextColor: Int = Color.BLACK
+
+    private var isCurrentlyInverted = false
+
     init {
         context.theme.obtainStyledAttributes(
             attrs,
@@ -25,10 +31,38 @@ class OptionButtonView @JvmOverloads constructor(
             try {
                 binding.buttonOption.text = getString(R.styleable.OptionButtonView_optionText)
                 binding.labelShortcut.text = getString(R.styleable.OptionButtonView_shortcutText)
+                optionBackgroundColor = getColor(R.styleable.OptionButtonView_optionBackgroundColor, Color.WHITE)
+                optionTextColor = getColor(R.styleable.OptionButtonView_optionTextColor, Color.BLACK)
+                applyColors()
                 updateContentDescription()
             } finally {
                 recycle()
             }
+        }
+    }
+
+    private fun applyColors() {
+        binding.buttonOption.setTextColor(optionTextColor)
+        binding.labelShortcut.setTextColor(optionTextColor)
+        binding.buttonOption.backgroundTintList = ColorStateList.valueOf(optionBackgroundColor)
+        binding.labelShortcut.backgroundTintList = ColorStateList.valueOf(optionBackgroundColor)
+    }
+
+    fun getOptionBackgroundColor(): Int = optionBackgroundColor
+
+    fun setOptionBackgroundColor(color: Int) {
+        optionBackgroundColor = color
+        if (!isCurrentlyInverted) {
+            applyColors()
+        }
+    }
+
+    fun getOptionTextColor(): Int = optionTextColor
+
+    fun setOptionTextColor(color: Int) {
+        optionTextColor = color
+        if (!isCurrentlyInverted) {
+            applyColors()
         }
     }
 
@@ -55,4 +89,32 @@ class OptionButtonView @JvmOverloads constructor(
     fun setButtonBackgroundTint(colorStateList: ColorStateList?) {
         binding.buttonOption.backgroundTintList = colorStateList
     }
+
+    fun invertColors() {
+        if (isCurrentlyInverted) return
+        isCurrentlyInverted = true
+
+        val invertedBg = invertColor(optionBackgroundColor)
+        val invertedText = invertColor(optionTextColor)
+
+        binding.buttonOption.setTextColor(invertedText)
+        binding.labelShortcut.setTextColor(invertedText)
+        binding.buttonOption.backgroundTintList = ColorStateList.valueOf(invertedBg)
+        binding.labelShortcut.backgroundTintList = ColorStateList.valueOf(invertedBg)
+    }
+
+    private fun invertColor(color: Int): Int {
+        return Color.rgb(
+            255 - Color.red(color),
+            255 - Color.green(color),
+            255 - Color.blue(color)
+        )
+    }
+
+    fun restoreColors() {
+        isCurrentlyInverted = false
+        applyColors()
+    }
+
+
 }

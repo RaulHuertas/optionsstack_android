@@ -1,0 +1,8 @@
+- [x] Add `optionBackgroundColor` and `optionTextColor` to `attrs.xml`
+- [x] Update `OptionButtonView.kt` with new properties and logic
+    - [x] Read attributes in `init`
+    - [x] Implement `applyColors()`
+    - [x] Add getters and setters
+    - [x] Update `restoreColors()`
+- [x] Verify build
+- [x] Create walkthrough

@@ -17,13 +17,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.optionA.setOnClickListener {
-            toggleOptionA()
-        }
-
-        binding.optionB.setOnClickListener {
-            toggleOptionB()
-        }
 
         binding.btnAddDynamic.setOnClickListener {
             addDynamicOption()
@@ -42,29 +35,32 @@ class MainActivity : AppCompatActivity() {
         binding.optionsGrid.addView(dynamicOption)
     }
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
             KeyEvent.KEYCODE_F -> {
-                toggleOptionA()
+                binding.optionA.invertColors()
                 true
             }
             KeyEvent.KEYCODE_J -> {
-                toggleOptionB()
+                binding.optionB.invertColors()
                 true
             }
             else -> super.onKeyUp(keyCode, event)
         }
     }
 
-    private fun toggleOptionA() {
-        isOptionAMatcha = !isOptionAMatcha
-        val colorRes = if (isOptionAMatcha) R.color.matcha else R.color.white
-        binding.optionA.setButtonBackgroundTint(ContextCompat.getColorStateList(this, colorRes))
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_F -> {
+                binding.optionA.restoreColors()
+                true
+            }
+            KeyEvent.KEYCODE_J -> {
+                binding.optionB.restoreColors()
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
     }
 
-    private fun toggleOptionB() {
-        isOptionBMaroon = !isOptionBMaroon
-        val colorRes = if (isOptionBMaroon) R.color.maroon else R.color.white
-        binding.optionB.setButtonBackgroundTint(ContextCompat.getColorStateList(this, colorRes))
-    }
 }

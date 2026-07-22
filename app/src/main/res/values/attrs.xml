@@ -3,5 +3,7 @@
     <declare-styleable name="OptionButtonView">
         <attr name="optionText" format="string" />
         <attr name="shortcutText" format="string" />
+        <attr name="optionBackgroundColor" format="color" />
+        <attr name="optionTextColor" format="color" />
     </declare-styleable>
 </resources>
