@@ -1,0 +1,2 @@
+- [x] Refactor `UIOptions.kt` constructor
+- [x] Verify build

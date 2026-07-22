@@ -1,0 +1,2 @@
+- [x] Add `associations` map to `UIOptions` class
+- [x] Verify build
