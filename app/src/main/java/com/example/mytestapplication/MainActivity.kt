@@ -42,11 +42,20 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
         updateKeyboardStatus()
 
         //create and handle options
+        val optionsA = UIOptions("Action A", "actA")
+        val optionsB = UIOptions("Action B", "actB")
+        val nestedOptionsC = listOf(
+            UIOptions("Action C-1", "actC1"),
+            UIOptions("Action C-2", "actC2"),
+            UIOptions("Action C-3", "actC3")
+        )
+        val optionsC = UIOptions("Action C", "actC")
+        optionsC.setOptions(nestedOptionsC)
         optionsStack.setOptions(
             listOf(
-                UIOptions("Action A", "actA"),
-                UIOptions("Action B", "actB"),
-                UIOptions("Action C", "actC")
+                optionsA,
+                optionsB,
+                optionsC
             )
         )
         optionsStack.setExecuter(this)
@@ -121,6 +130,7 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
                     setOnClickListener {
                         optionsStack.triggerOption(index)
                         if (uiOption.isNested()) {
+                            //Update the options with the nested options
                             mirrorOptions()
                         }
                     }
