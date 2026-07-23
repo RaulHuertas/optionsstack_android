@@ -10,13 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.mytestapplication.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), UIOptionExecuter {
 
     private lateinit var binding: ActivityMainBinding
     private var isOptionAMatcha = false
     private var isOptionBMaroon = false
     private val optionsStack = UIOptionsStack()
-    private val options = ArrayList<OptionButtonView>()
+    private val optionsButtons = ArrayList<OptionButtonView>()
 
     private val inputDeviceListener = object : InputManager.InputDeviceListener {
         override fun onInputDeviceAdded(deviceId: Int) = updateKeyboardStatus()
@@ -36,9 +36,20 @@ class MainActivity : AppCompatActivity() {
             addDynamicOption()
         }
 
+        //Keyboard presence status
         val inputManager = getSystemService(INPUT_SERVICE) as InputManager
         inputManager.registerInputDeviceListener(inputDeviceListener, null)
         updateKeyboardStatus()
+
+        //create and handle options
+        optionsStack.setOptions(
+            listOf(
+                UIOptions("Action A", "actA"),
+                UIOptions("Action B", "actB"),
+                UIOptions("Action C", "actC")
+            )
+        )
+        optionsStack.setExecuter(this)
     }
 
     override fun onDestroy() {
@@ -71,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addDynamicOption() {
-        val index = options.size
+        val index = optionsButtons.size
         val dynamicOption = OptionButtonView(this).apply {
             layoutParams = android.widget.GridLayout.LayoutParams().apply {
                 width = resources.getDimensionPixelSize(R.dimen.option_button_width)
@@ -84,29 +95,36 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.optionsGrid.addView(dynamicOption)
-        options.add(dynamicOption)
+        optionsButtons.add(dynamicOption)
     }
 
     private fun printLog(message: String) {
         binding.tvStatus.text = message
     }
 
+    override fun call_option(functionInternalName: String) {
+        printLog("Executing: $functionInternalName")
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+
         event?.let {
             val unicodeChar = it.getUnicodeChar(it.metaState)
             if (unicodeChar != 0) {
                 val char = unicodeChar.toChar()
                 val index = optionsStack.newCharacterPressed(char)
-                if (index != -1 && index < options.size) {
-                    options[index].performClick()
+                if (index != -1 && index < optionsButtons.size) {
+                    optionsStack.triggerOption(index)
                     return true
                 }
             }
         }
-        return super.onKeyDown(keyCode, event)
-    }
+        return super.onKeyUp(keyCode, event)
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         /*
         return when (keyCode) {
             KeyEvent.KEYCODE_R -> {
@@ -120,7 +138,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onKeyUp(keyCode, event)
         }
         */
-        return super.onKeyUp(keyCode, event)
     }
 
 }

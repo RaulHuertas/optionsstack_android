@@ -1,7 +1,14 @@
 package com.example.mytestapplication
 
 class UIOptionsStack {
-    var options : List<UIOptions> = emptyList()
+    private var options: List<UIOptions> = emptyList()
+
+    fun getOptions(): List<UIOptions> = options
+
+    fun setOptions(options: List<UIOptions>) {
+        this.options = options
+    }
+
     val stackPositions = mutableListOf<Int>()
     val shortcuts: Array<String>
 
@@ -25,10 +32,20 @@ class UIOptionsStack {
         currentCommand += newChar
         if (currentCommand.length == 2) {
             val index = shortcuts.indexOf(currentCommand)
-            currentCommand = ""
+            restartCommand()
             return index
+        }else if(currentCommand.length >2){
+            restartCommand()
         }
         return -1
+    }
+
+    fun currentCommandProgress():String{
+        return currentCommand
+    }
+
+    fun restartCommand(){
+        currentCommand = ""
     }
 
     fun currentLevel():Int{
@@ -58,14 +75,6 @@ class UIOptionsStack {
         if (selectedOption.isNested()) {
             stackPositions.add(index)
         }
-    }
-
-    fun currentCommandProgress():String{
-        return currentCommand
-    }
-
-    fun restartCommand(){
-        currentCommand = ""
     }
 
     fun shortcutAtIndex(index:Int ): String {

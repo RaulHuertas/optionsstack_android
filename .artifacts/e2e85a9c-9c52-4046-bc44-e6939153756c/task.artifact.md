@@ -14,3 +14,7 @@
     - [x] Make `stackPositions` mutable
     - [x] Correct `triggerOption` navigation logic
     - [x] Remove redundant `level()` method
+- [x] Implement `UIOptionExecuter` in `MainActivity.kt`
+    - [x] Implement `call_option`
+    - [x] Link `optionsStack` to `MainActivity` in `onCreate`
+- [x] Add getters and setters for `options` in `UIOptionsStack.kt`

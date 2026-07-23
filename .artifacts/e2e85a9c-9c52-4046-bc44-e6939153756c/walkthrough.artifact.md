@@ -7,6 +7,7 @@ I have implemented the keyboard shortcut logic in `MainActivity.kt` using `UIOpt
 ### [UIOptionsStack](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/UIOptionsStack.kt)
 - Improved `newCharacterPressed` to reset the `currentCommand` buffer after a 2-character shortcut is attempted, ensuring more robust input handling.
 - Added `executer` property with `getExecuter()` and `setExecuter()` methods to handle command execution.
+- Added `options` property with `getOptions()` and `setOptions()` methods.
 - Fixed `stackPositions` to be a `MutableList` for hierarchy tracking.
 - Fixed `triggerOption` to correctly check bounds, trigger the appropriate option at the current depth, and navigate into nested sub-options.
 - Cleaned up redundant `level()` method in favor of `currentLevel()`.
@@ -20,9 +21,12 @@ I have implemented the keyboard shortcut logic in `MainActivity.kt` using `UIOpt
 - Added `toggleInversion()` to simplify the action for dynamic options.
 
 ### [MainActivity](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
+- Implemented `UIOptionExecuter` interface.
+- Linked `optionsStack` to the activity as its executer.
+- Added `call_option` implementation to log command execution in the status bar.
 - Overrode `onKeyDown` to capture Unicode characters from key events.
 - Registered these characters with `optionsStack`.
-- When a valid shortcut index is returned, `performClick()` is called on the corresponding `OptionButtonView` in the `options` list.
+- When a valid shortcut index is returned, `optionsStack.triggerOption(index)` is called.
 - Added `printLog(message: String)` to update the status bar.
 - Updated `addDynamicOption` to use `printLog` instead of console logging.
 

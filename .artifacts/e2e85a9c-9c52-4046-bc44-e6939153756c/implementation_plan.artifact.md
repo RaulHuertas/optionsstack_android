@@ -1,44 +1,38 @@
-# Fix UIOptionsStack.kt
+# Implement UIOptionExecuter in MainActivity
 
-This plan addresses several logic and syntax errors in `UIOptionsStack.kt` to ensure proper hierarchy management and option triggering.
+This plan outlines the steps to make `MainActivity` implement the `UIOptionExecuter` interface and integrate it with `UIOptionsStack`.
 
 ## Proposed Changes
 
-### [app module](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app)
+### [MainActivity](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
 
-#### [MODIFY] [UIOptionsStack.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/UIOptionsStack.kt)
+#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
 
-- **Fix `stackPositions` property**: Change it from an immutable `List` to a `MutableList` so that levels can be pushed onto the stack.
-- **Fix `triggerOption` method**:
-    - Correct the reversed bounds check (`options.size > index` incorrectly returns early).
-    - Use `currentOptionsAtLevel()` to ensure the correct option is triggered based on the current navigation depth.
-    - Update `stackPositions` if the selected option is nested.
-- **Cleanup redundant methods**: Remove `level()` in favor of `currentLevel()`.
-- **Consistency**: Ensure `currentOptionsAtLevel` is used where appropriate.
+- Update the class signature to implement `UIOptionExecuter`.
+- Initialize `optionsStack.setExecuter(this)` in `onCreate`.
+- Implement `call_option(functionInternalName: String)` to log the executed action.
 
 ```kotlin
-    val stackPositions = mutableListOf<Int>()
-
+class MainActivity : AppCompatActivity(), UIOptionExecuter {
     // ...
-
-    fun triggerOption(index: Int) {
-        val currentOptions = currentOptionsAtLevel()
-        if (index < 0 || index >= currentOptions.size) {
-            return
-        }
-        val selectedOption = currentOptions[index]
-        executer?.call_option(selectedOption.getInternalName())
-        if (selectedOption.isNested()) {
-            stackPositions.add(index)
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // ...
+        optionsStack.setExecuter(this)
+        // ...
     }
+
+    override fun call_option(functionInternalName: String) {
+        printLog("Executing: $functionInternalName")
+    }
+}
 ```
 
 ## Verification Plan
 
 ### Automated Tests
-- Verify that the code compiles successfully after these changes.
-- Ensure no runtime `UnsupportedOperationException` occurs when calling `triggerOption`.
+- Build the project to ensure no compilation errors.
 
 ### Manual Verification
-- N/A as these methods are not currently invoked by the UI, but this fix prepares them for future use.
+- Deploy the app.
+- Trigger a shortcut (e.g., via keyboard).
+- Verify that `printLog` displays "Executing: [internalName]" in the status bar when an option is triggered via `optionsStack.triggerOption(index)`.
