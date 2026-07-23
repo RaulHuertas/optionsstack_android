@@ -21,14 +21,11 @@ I have implemented the keyboard shortcut logic in `MainActivity.kt` using `UIOpt
 - Added `toggleInversion()` to simplify the action for dynamic options.
 
 ### [MainActivity](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
-- Implemented `UIOptionExecuter` interface.
-- Linked `optionsStack` to the activity as its executer.
-- Added `call_option` implementation to log command execution in the status bar.
-- Overrode `onKeyDown` to capture Unicode characters from key events.
-- Registered these characters with `optionsStack`.
-- When a valid shortcut index is returned, `optionsStack.triggerOption(index)` is called.
-- Added `printLog(message: String)` to update the status bar.
-- Updated `addDynamicOption` to use `printLog` instead of console logging.
+- Implemented an optimized UI mirroring system for `UIOptions`.
+- **Pool Allocation**: Preallocates 100 `OptionButtonView` instances in a hidden state on startup to prevent UI jank during navigation.
+- **Dynamic Sync**: Added `mirrorOptions()` which synchronizes the visible buttons with the current level of the `UIOptionsStack`.
+- **Navigation Support**: The UI now automatically refreshes whenever a shortcut is used to navigate into nested options.
+- Implemented `UIOptionExecuter` interface and linked it to the activity as its executer.
 
 ### Layout (activity_main.xml)
 - Added a `tvStatus` TextView at the bottom of the screen to serve as a status bar.

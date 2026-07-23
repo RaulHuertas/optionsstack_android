@@ -50,6 +50,9 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
             )
         )
         optionsStack.setExecuter(this)
+
+        preallocateButtons()
+        mirrorOptions()
     }
 
     override fun onDestroy() {
@@ -78,6 +81,54 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
             "Keyboard Connected"
         } else {
             "No Keyboard Connected"
+        }
+    }
+
+    private fun preallocateButtons(count: Int = 100) {
+        repeat(count) {
+            val button = createOptionButton()
+            button.visibility = View.GONE
+            binding.optionsGrid.addView(button)
+            optionsButtons.add(button)
+        }
+    }
+
+    private fun createOptionButton(): OptionButtonView {
+        return OptionButtonView(this).apply {
+            layoutParams = android.widget.GridLayout.LayoutParams().apply {
+                width = resources.getDimensionPixelSize(R.dimen.option_button_width)
+                height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT
+            }
+        }
+    }
+
+    private fun mirrorOptions() {
+        val currentOptions = optionsStack.currentOptions()
+
+        // Expand pool if needed
+        while (optionsButtons.size < currentOptions.size) {
+            val button = createOptionButton()
+            binding.optionsGrid.addView(button)
+            optionsButtons.add(button)
+        }
+
+        optionsButtons.forEachIndexed { index, button ->
+            if (index < currentOptions.size) {
+                val uiOption = currentOptions[index]
+                button.apply {
+                    setOptionText(uiOption.getDisplayName())
+                    setShortcutText("[${optionsStack.shortcutAtIndex(index)}]")
+                    setOnClickListener {
+                        optionsStack.triggerOption(index)
+                        if (uiOption.isNested()) {
+                            mirrorOptions()
+                        }
+                    }
+                    visibility = View.VISIBLE
+                }
+            } else {
+                button.visibility = View.GONE
+            }
         }
     }
 
@@ -119,6 +170,7 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
                 val index = optionsStack.newCharacterPressed(char)
                 if (index != -1 && index < optionsButtons.size) {
                     optionsStack.triggerOption(index)
+                    mirrorOptions()
                     return true
                 }
             }

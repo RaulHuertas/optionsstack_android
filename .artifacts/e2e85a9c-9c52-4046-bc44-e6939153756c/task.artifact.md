@@ -18,3 +18,7 @@
     - [x] Implement `call_option`
     - [x] Link `optionsStack` to `MainActivity` in `onCreate`
 - [x] Add getters and setters for `options` in `UIOptionsStack.kt`
+- [x] Implement optimized UI mirroring in `MainActivity.kt`
+    - [x] Preallocate 100 `OptionButtonView` instances
+    - [x] Implement `mirrorOptions` using visibility toggling
+    - [x] Auto-refresh UI on shortcut navigation
