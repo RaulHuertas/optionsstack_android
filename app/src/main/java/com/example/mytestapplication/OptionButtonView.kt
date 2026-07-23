@@ -87,6 +87,14 @@ class OptionButtonView @JvmOverloads constructor(
         binding.buttonOption.setOnClickListener(l)
     }
 
+    override fun performClick(): Boolean {
+        return if (binding.buttonOption.performClick()) true else super.performClick()
+    }
+
+    fun toggleInversion() {
+        if (isCurrentlyInverted) restoreColors() else invertColors()
+    }
+
     fun invertColors() {
         if (isCurrentlyInverted) return
         isCurrentlyInverted = true

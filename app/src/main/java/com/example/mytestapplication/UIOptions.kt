@@ -1,14 +1,24 @@
 package com.example.mytestapplication
-
-enum class OptionsType{
-    Final,
-    List
-}
-class UIOptions{
-    //This is the name to display for this function
-    private var displayName: String = ""
-    //When this option is selected, the stack calls the executioner with 'internalName' as parameter
-    private var internalName : String = ""
-    //If this option redirects us to antoher options, this should be filled with those options
+class UIOptions(
+    private var displayName: String = "",
+    private var internalName: String = "",
     private var options: List<UIOptions> = emptyList()
+) {
+    fun getDisplayName(): String = displayName
+    fun setDisplayName(name: String) {
+        displayName = name
+    }
+
+    fun getInternalName(): String = internalName
+    fun setInternalName(name: String) {
+        internalName = name
+    }
+
+    fun getOptions(): List<UIOptions> = options
+    fun setOptions(options: List<UIOptions>) {
+        this.options = options
+    }
+    fun isNested(): Boolean{
+        return options.isNotEmpty()
+    }
 }

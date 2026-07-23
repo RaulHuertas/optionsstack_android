@@ -1,4 +1,6 @@
 - [x] Update `activity_main.xml` with keyboard status label
 - [x] Update `AndroidManifest.xml` to handle config changes
 - [x] Implement keyboard detection logic in `MainActivity.kt`
+- [x] Register key presses with `optionsStack`
+- [x] Add `onShortcutTriggered` function
 - [x] Verify changes

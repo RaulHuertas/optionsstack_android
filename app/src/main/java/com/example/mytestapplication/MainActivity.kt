@@ -77,27 +77,32 @@ class MainActivity : AppCompatActivity() {
                 width = resources.getDimensionPixelSize(R.dimen.option_button_width)
                 height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT
             }
-            setOptionText("Dynamic")
+            setOptionText("Dynamic $index")
             setShortcutText("[${optionsStack.shortcutAtIndex(index)}]")
+            setOnClickListener {
+                printLog("Option clicked: $index")
+            }
         }
         binding.optionsGrid.addView(dynamicOption)
         options.add(dynamicOption)
     }
 
+    private fun printLog(message: String) {
+        binding.tvStatus.text = message
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        /*
-        return when (keyCode) {
-            KeyEvent.KEYCODE_R -> {
-                binding.optionA.invertColors()
-                true
+        event?.let {
+            val unicodeChar = it.getUnicodeChar(it.metaState)
+            if (unicodeChar != 0) {
+                val char = unicodeChar.toChar()
+                val index = optionsStack.newCharacterPressed(char)
+                if (index != -1 && index < options.size) {
+                    options[index].performClick()
+                    return true
+                }
             }
-            KeyEvent.KEYCODE_U -> {
-                binding.optionB.invertColors()
-                true
-            }
-            else -> super.onKeyUp(keyCode, event)
         }
-        */
         return super.onKeyDown(keyCode, event)
     }
 

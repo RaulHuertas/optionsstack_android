@@ -1,0 +1,16 @@
+- [x] Update `MainActivity.kt` to register key presses with `optionsStack`
+    - [x] Implement `onKeyDown` to capture Unicode characters
+    - [x] Pass characters to `optionsStack.newCharacterPressed`
+    - [x] Trigger action on completed shortcut
+- [x] (Optional) Update `OptionButtonView.kt` to handle `performClick` correctly
+- [x] Verify the implementation
+- [x] Add status bar to `activity_main.xml`
+- [x] Implement `printLog(message: String)` in `MainActivity.kt`
+- [x] Update `addDynamicOption` to use `printLog`
+- [x] Add `UIOptionExecuter` to `UIOptionsStack.kt` with getters and setters
+- [x] Add primary constructor to `UIOptions.kt`
+- [x] Add getters and setters to `UIOptions.kt`
+- [x] Fix logic and syntax errors in `UIOptionsStack.kt`
+    - [x] Make `stackPositions` mutable
+    - [x] Correct `triggerOption` navigation logic
+    - [x] Remove redundant `level()` method
