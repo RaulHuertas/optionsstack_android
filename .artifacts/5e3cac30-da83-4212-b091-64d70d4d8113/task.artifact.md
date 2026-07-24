@@ -1,3 +1,6 @@
-- [x] Update `activity_main.xml` to wrap `optionsGrid` in a `ScrollView`
-- [x] Verify the layout in `MainActivity.kt` (no changes expected, but check if `binding.optionsGrid` is still valid)
-- [x] Build and verify the scrollable behavior
+- [x] Modify `OptionButtonView.kt`
+    - [x] Add `shortcutMatchingCount` field and getter/setter
+    - [x] Implement `updateShortcutDisplay()` with `SpannableString`
+    - [x] Update `setShortcutText()` and color management methods to call `updateShortcutDisplay()`
+- [x] Verify build
+- [x] Integrate with `MainActivity.kt` to show matching progress

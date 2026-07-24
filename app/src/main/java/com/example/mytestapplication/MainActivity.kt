@@ -130,9 +130,17 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
         optionsButtons.forEachIndexed { index, button ->
             if (index < currentOptions.size) {
                 val uiOption = currentOptions[index]
+                val shortcut = optionsStack.shortcutAtIndex(index)
+                val command = optionsStack.currentCommandProgress()
+                
+                var matchCount = 0
+                if (command.isNotEmpty() && shortcut.startsWith(command)) {
+                    matchCount = command.length
+                }
+
                 button.apply {
                     setOptionText(uiOption.getDisplayName())
-                    setShortcutText("[${optionsStack.shortcutAtIndex(index)}]")
+                    setShortcutText("$shortcut")
                     setOnClickListener {
                         optionsStack.triggerOption(index)
                         if (uiOption.isNested()) {

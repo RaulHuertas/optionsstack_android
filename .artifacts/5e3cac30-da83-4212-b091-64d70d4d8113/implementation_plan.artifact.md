@@ -1,20 +1,29 @@
-# Implementation Plan - Change 'optionsGrid' to a Scroll Area
+# Implementation Plan - Multi-colored Shortcut Highlights
 
-The user wants to make the options grid scrollable. Currently, it's a `GridLayout` directly inside a `ConstraintLayout`, which doesn't scroll if items exceed the screen height. I will wrap it in a `ScrollView`.
+The goal is to allow highlighting the first $N$ characters of the shortcut text in an `OptionButtonView` using a different color (Red). This is typically used to show how much of a keyboard shortcut the user has already typed.
 
 ## Proposed Changes
 
-### UI Layout
+### Custom View Logic
 
-#### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
-- Wrap the `<GridLayout android:id="@+id/optionsGrid" ...>` inside a `<ScrollView>`.
-- Transfer the layout constraints from the `GridLayout` to the `ScrollView`.
-- Update the `GridLayout` to have `android:layout_width="wrap_content"` and `android:layout_height="wrap_content"`.
-- Set the `ScrollView` to take up the available vertical space between `tvKeyboardStatus` and `tvStatus`.
+#### [MODIFY] [OptionButtonView.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/OptionButtonView.kt)
+- Add a private field `shortcutMatchingCount` initialized to 0.
+- Implement `getShortcutMatchingCount()` and `setShortcutMatchingCount(count: Int)`.
+- The setter will trigger a UI update to refresh the text coloring.
+- Create a private method `updateShortcutDisplay()`:
+    - Retrieves the current shortcut text.
+    - Uses `SpannableString` to apply a `ForegroundColorSpan(Color.RED)` to the first `shortcutMatchingCount` characters.
+    - Applies `ForegroundColorSpan(optionTextColor)` (or `Color.BLACK` per request) to the remaining characters.
+    - Sets the resulting spannable string to `binding.labelShortcut`.
+- Update `setShortcutText()` to call `updateShortcutDisplay()` instead of setting the text directly.
+- Update `applyColors()`, `invertColors()`, and `restoreColors()` to ensure the "remaining" color stays consistent with the rest of the button's theme (or the requested black).
+
+> [!NOTE]
+> I will use `optionTextColor` for the "black" part to ensure it respects the view's existing `optionTextColor` property, which is black by default but can be changed. If you strictly want `Color.BLACK`, let me know.
 
 ## Verification Plan
 
 ### Manual Verification
-- Deploy the app to a device or emulator.
-- Observe that the options are now scrollable if there are many of them.
-- I will verify that `preallocateButtons(100)` correctly fills the scrollable area.
+- I will verify the logic by temporarily setting a non-zero match count in `MainActivity.kt` or by inspecting the code.
+- Ensure that if `shortcutMatchingCount` is greater than the text length, it doesn't crash (clamping).
+- Verify that `invertColors` still works (though the Red highlight will likely remain Red, which is standard for "error/match" highlights).

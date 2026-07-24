@@ -5,6 +5,9 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import com.example.mytestapplication.databinding.ViewOptionButtonBinding
@@ -23,6 +26,8 @@ class OptionButtonView @JvmOverloads constructor(
 
     private var nested = false
     private var isCurrentlyInverted = false
+    private var shortcutMatchingCount = 0
+    private var rawShortcutText: String = ""
 
     init {
         context.theme.obtainStyledAttributes(
@@ -32,10 +37,11 @@ class OptionButtonView @JvmOverloads constructor(
         ).apply {
             try {
                 binding.buttonOption.text = getString(R.styleable.OptionButtonView_optionText)
-                binding.labelShortcut.text = getString(R.styleable.OptionButtonView_shortcutText)
+                rawShortcutText = getString(R.styleable.OptionButtonView_shortcutText) ?: ""
                 optionBackgroundColor = getColor(R.styleable.OptionButtonView_optionBackgroundColor, Color.WHITE)
                 optionTextColor = getColor(R.styleable.OptionButtonView_optionTextColor, Color.BLACK)
                 applyColors()
+                updateShortcutDisplay()
                 updateContentDescription()
             } finally {
                 recycle()
@@ -45,7 +51,7 @@ class OptionButtonView @JvmOverloads constructor(
 
     private fun applyColors() {
         binding.buttonOption.setTextColor(optionTextColor)
-        binding.labelShortcut.setTextColor(optionTextColor)
+        updateShortcutDisplay()
         binding.nestedIndicator.setTextColor(optionTextColor)
         ViewCompat.setBackgroundTintList(binding.buttonOption, ColorStateList.valueOf(optionBackgroundColor))
         ViewCompat.setBackgroundTintList(binding.labelShortcut, ColorStateList.valueOf(optionBackgroundColor))
@@ -76,8 +82,46 @@ class OptionButtonView @JvmOverloads constructor(
     }
 
     fun setShortcutText(text: String) {
-        binding.labelShortcut.text = text
+        rawShortcutText = text
+        updateShortcutDisplay()
         updateContentDescription()
+    }
+
+    fun getShortcutMatchingCount(): Int = shortcutMatchingCount
+
+    fun setShortcutMatchingCount(count: Int) {
+        shortcutMatchingCount = count.coerceIn(0, rawShortcutText.length)
+        updateShortcutDisplay()
+    }
+
+    private fun updateShortcutDisplay() {
+        val text = rawShortcutText
+        if (text.isEmpty()) {
+            binding.labelShortcut.text = ""
+            return
+        }
+
+        val spannable = SpannableString(text)
+        val matchEnd = shortcutMatchingCount.coerceAtMost(text.length)
+
+        if (matchEnd > 0) {
+            spannable.setSpan(
+                ForegroundColorSpan(Color.RED),
+                0, matchEnd,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        if (matchEnd < text.length) {
+            val remainingColor = if (isCurrentlyInverted) invertColor(optionTextColor) else optionTextColor
+            spannable.setSpan(
+                ForegroundColorSpan(remainingColor),
+                matchEnd, text.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        binding.labelShortcut.text = spannable
     }
 
     fun isNested(): Boolean = nested
@@ -89,7 +133,7 @@ class OptionButtonView @JvmOverloads constructor(
 
     private fun updateContentDescription() {
         val optionText = binding.buttonOption.text ?: ""
-        val shortcutText = binding.labelShortcut.text ?: ""
+        val shortcutText = rawShortcutText
         binding.buttonOption.contentDescription = "$optionText, shortcut $shortcutText"
     }
 
@@ -113,7 +157,7 @@ class OptionButtonView @JvmOverloads constructor(
         val invertedText = invertColor(optionTextColor)
 
         binding.buttonOption.setTextColor(invertedText)
-        binding.labelShortcut.setTextColor(invertedText)
+        updateShortcutDisplay()
         binding.nestedIndicator.setTextColor(invertedText)
         ViewCompat.setBackgroundTintList(binding.buttonOption, ColorStateList.valueOf(invertedBg))
         ViewCompat.setBackgroundTintList(binding.labelShortcut, ColorStateList.valueOf(invertedBg))
