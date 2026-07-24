@@ -1,6 +1,6 @@
-# Add "Go back" Button to UI
+# Move "Go back" Button to Top-Left (Final)
 
-This plan describes adding a "Go back" button to the main screen, positioned next to the "Add Dynamic" button. This button will provide a visual way to navigate back through the options hierarchy.
+Move the "Go back" button (`btnGoBack`) to the top-left corner of the screen in `activity_main.xml`, while leaving all other elements untouched.
 
 ## Proposed Changes
 
@@ -8,22 +8,28 @@ This plan describes adding a "Go back" button to the main screen, positioned nex
 
 #### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
 
-- Add a new `Button` with id `btnGoBack`.
-- Use a horizontal chain to position `btnGoBack` and `btnAddDynamic` side-by-side.
-- Set initial visibility of `btnGoBack` to `gone`.
+- Update `btnGoBack` constraints:
+    - Set `app:layout_constraintTop_toTopOf="parent"`.
+    - Set `app:layout_constraintStart_toStartOf="parent"`.
+    - Remove `app:layout_constraintEnd_toEndOf="parent"` and any `tools:layout_editor_absoluteY`.
+    - Add `android:layout_margin="8dp"` for spacing.
 
-### [MainActivity](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
-
-#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
-
-- In `onCreate`, set the `onClickListener` for `btnGoBack` to call `optionsStack.goBack()` and `mirrorOptions()`.
-- In `mirrorOptions()`, update the visibility of `btnGoBack` based on `optionsStack.currentLevel() > 0`.
+```xml
+    <Button
+        android:id="@+id/btnGoBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Go back"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+```
 
 ## Verification Plan
 
 ### Manual Verification
-1.  Deploy the app.
-2.  Verify only "Add Dynamic" is visible on the home screen.
-3.  Navigate into a nested menu (e.g., "Action C").
-4.  Verify that the "Go back" button appears.
-5.  Click the "Go back" button and verify the UI returns to the parent menu and the button disappears.
+1. Deploy the app.
+2. Navigate to a nested level.
+3. Verify that the "Go back" button appears in the top-left corner.

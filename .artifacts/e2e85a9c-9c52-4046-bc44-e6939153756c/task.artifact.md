@@ -30,3 +30,4 @@
 - [x] Handle `ESC` and `BACKSPACE` for back navigation in `MainActivity.kt`
 - [x] Add "Go back" button next to "Add Dynamic" in `activity_main.xml`
 - [x] Toggle "Go back" visibility in `mirrorOptions()` based on `currentLevel`
+- [x] Move `btnGoBack` to the top-left corner in `activity_main.xml`

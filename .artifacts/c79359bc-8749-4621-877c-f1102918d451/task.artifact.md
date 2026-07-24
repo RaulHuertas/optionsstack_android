@@ -1,0 +1,2 @@
+- [x] Update `optionsGrid` constraints in `activity_main.xml`
+- [x] Verify layout alignment
