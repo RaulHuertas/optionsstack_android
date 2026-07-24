@@ -1,21 +1,12 @@
-# Implementation Plan - Generate Application Icons from logo.jpg
+# Implementation Plan - Full-Bleed Application Icons from logo.jpg
 
-The goal is to generate high-quality PNG icons for all Android screen densities using the provided `logo.jpg` file. This includes both legacy launcher icons and foreground layers for adaptive icons.
-
-## User Review Required
-
-> [!IMPORTANT]
-> **Transparency/Background**: `logo.jpg` is a JPEG and likely lacks transparency. When used as a foreground layer for an adaptive icon, it will be placed over the existing background. If the logo has a background itself, it might look like a "square within a shape" unless we use it as the entire icon.
-> I will assume you want the logo centered in the icon.
-
-> [!WARNING]
-> **Existing WebP Files**: I will be deleting the existing `ic_launcher.webp` and `ic_launcher_round.webp` files to ensure the new PNG icons are used without conflict.
+The goal is to re-generate the application icons so that the source image `logo.jpg` expands to occupy the entire area of each icon (full-bleed), without any margins or padding.
 
 ## Proposed Changes
 
-### Icon Assets Generation
+### Icon Assets Generation (Full-Bleed)
 
-I will use ImageMagick (`magick`) to generate the following assets:
+I will use ImageMagick (`magick`) with the "resize and crop to fill" strategy (`-resize "XxY^" -gravity center -extent XxY`) to ensure the target squares are completely covered by the image.
 
 #### Legacy Launcher Icons (`ic_launcher.png` and `ic_launcher_round.png`)
 Targeting `app/src/main/res/mipmap-<density>/`:
@@ -33,21 +24,11 @@ Targeting `app/src/main/res/mipmap-<density>/`:
 - **xxhdpi**: 324x324 px
 - **xxxhdpi**: 432x432 px
 
-### Resource Configuration
+> [!WARNING]
+> **Adaptive Icon Clipping**: Expanding the image to fill the entire 108x108 dp foreground layer means the edges of the image will be clipped by the Android system's icon mask (e.g., the corners of the squircle or the edges of the circle). This is the expected result of "occupying all of the image".
 
-#### [MODIFY] [ic_launcher.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml)
-Update to point to the new `@mipmap/ic_launcher_foreground` instead of the old XML drawable.
+### Verification Plan
 
-#### [MODIFY] [ic_launcher_round.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml)
-Update similarly if needed.
-
-#### [DELETE] Existing `.webp` icons
-Remove `ic_launcher.webp` and `ic_launcher_round.webp` from all `mipmap-*` folders.
-
-## Verification Plan
-
-### Automated Tests
-- I will run `gradlew assembleDebug` (or a similar build task) to ensure the resources are correctly processed and there are no naming conflicts.
-
-### Manual Verification
-- I will list the files in the `res` directories to confirm they are all present with correct sizes.
+#### Manual Verification
+- I will use `magick identify` to confirm the dimensions and verify that the files are PNG format.
+- I will check the file list to ensure no other formats (like `.webp`) are present.

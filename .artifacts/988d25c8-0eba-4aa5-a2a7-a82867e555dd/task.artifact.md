@@ -1,0 +1,13 @@
+- [x] Generate Full-Bleed Legacy Icons (`ic_launcher.png` and `ic_launcher_round.png`)
+    - [x] mdpi (48x48)
+    - [x] hdpi (72x72)
+    - [x] xhdpi (96x96)
+    - [x] xxhdpi (144x144)
+    - [x] xxxhdpi (192x192)
+- [x] Generate Full-Bleed Adaptive Foreground Icons (`ic_launcher_foreground.png`)
+    - [x] mdpi (108x108)
+    - [x] hdpi (162x162)
+    - [x] xhdpi (216x216)
+    - [x] xxhdpi (324x324)
+    - [x] xxxhdpi (432x432)
+- [x] Verification of dimensions and format
