@@ -114,6 +114,22 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
     private fun goBackInOptions(){
         optionsStack.goBack()
         mirrorOptions()
+        optionsStack.restartCommand()
+        updateShortcutsHighlight()
+    }
+
+    private fun updateShortcutsHighlight(){
+        val currentCommand = optionsStack.currentCommandProgress()
+        optionsButtons.forEach { button ->
+            if (button.visibility == View.VISIBLE) {
+                val shortcut = button.getShortcutText()
+                if (currentCommand.isNotEmpty() && shortcut.startsWith(currentCommand)) {
+                    button.setShortcutMatchingCount(currentCommand.length)
+                } else {
+                    button.setShortcutMatchingCount(0)
+                }
+            }
+        }
     }
     private fun mirrorOptions() {
         val currentOptions = optionsStack.currentOptions()
@@ -141,6 +157,7 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
                 button.apply {
                     setOptionText(uiOption.getDisplayName())
                     setShortcutText("$shortcut")
+                    setShortcutMatchingCount(matchCount)
                     setOnClickListener {
                         optionsStack.triggerOption(index)
                         if (uiOption.isNested()) {
@@ -155,23 +172,6 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
                 button.visibility = View.GONE
             }
         }
-    }
-
-    private fun addDynamicOption() {
-        val index = optionsButtons.size
-        val dynamicOption = OptionButtonView(this).apply {
-            layoutParams = android.widget.GridLayout.LayoutParams().apply {
-                width = resources.getDimensionPixelSize(R.dimen.option_button_width)
-                height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT
-            }
-            setOptionText("Dynamic $index")
-            setShortcutText("[${optionsStack.shortcutAtIndex(index)}]")
-            setOnClickListener {
-                printLog("Option clicked: $index")
-            }
-        }
-        binding.optionsGrid.addView(dynamicOption)
-        optionsButtons.add(dynamicOption)
     }
 
     private fun printLog(message: String) {
@@ -196,6 +196,8 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
             if (unicodeChar != 0) {
                 val char = unicodeChar.toChar()
                 val index = optionsStack.newCharacterPressed(char)
+                updateShortcutsHighlight()
+
                 if (index != -1 && index < optionsButtons.size) {
                     optionsStack.triggerOption(index)
                     mirrorOptions()

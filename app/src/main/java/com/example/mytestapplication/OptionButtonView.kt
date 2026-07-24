@@ -87,6 +87,8 @@ class OptionButtonView @JvmOverloads constructor(
         updateContentDescription()
     }
 
+    fun getShortcutText(): String = rawShortcutText
+
     fun getShortcutMatchingCount(): Int = shortcutMatchingCount
 
     fun setShortcutMatchingCount(count: Int) {
