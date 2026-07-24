@@ -1,6 +1,6 @@
-# Implementation Plan - Center optionsGrid in activity_main.xml
+# Implementation Plan - Fix optionsGrid movement in activity_main.xml
 
-Modify `activity_main.xml` to ensure `optionsGrid` is centered between `btnGoBack` and `tvStatus`.
+Change the top constraint of `optionsGrid` from `btnGoBack` to the parent top border to prevent it from shifting when `btnGoBack` visibility changes.
 
 ## Proposed Changes
 
@@ -8,12 +8,11 @@ Modify `activity_main.xml` to ensure `optionsGrid` is centered between `btnGoBac
 
 #### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
 - Update `optionsGrid` constraints:
-    - Set `app:layout_constraintTop_toBottomOf="@id/btnGoBack"`.
-    - Set `app:layout_constraintBottom_toTopOf="@id/tvStatus"`.
-    - Keep `app:layout_constraintStart_toStartOf="parent"` and `app:layout_constraintEnd_toEndOf="parent"`.
-    - Remove `app:layout_constraintTop_toBottomOf="@id/tvKeyboardStatus"`.
+    - Change `app:layout_constraintTop_toBottomOf="@id/btnGoBack"` to `app:layout_constraintTop_toTopOf="parent"`.
+    - Maintain `app:layout_constraintBottom_toTopOf="@id/tvStatus"` to keep it centered in the remaining space.
+    - This will make the grid position independent of `btnGoBack`'s visibility.
 
 ## Verification Plan
 
 ### Manual Verification
-- Render the layout preview to verify that `optionsGrid` is vertically centered between the "Go back" button and the status bar at the bottom.
+- Render the layout preview and toggle `btnGoBack` visibility between `visible` and `gone` to ensure `optionsGrid` remains in a fixed position.

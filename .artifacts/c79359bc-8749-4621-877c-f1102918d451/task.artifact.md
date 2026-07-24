@@ -1,2 +1,2 @@
 - [x] Update `optionsGrid` constraints in `activity_main.xml`
-- [x] Verify layout alignment
+- [x] Verify layout stability when `btnGoBack` visibility changes

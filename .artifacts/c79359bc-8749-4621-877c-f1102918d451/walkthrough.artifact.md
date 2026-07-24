@@ -1,21 +1,17 @@
-# Walkthrough - Center optionsGrid in activity_main.xml
+# Walkthrough - Fix optionsGrid movement in activity_main.xml
 
-The `optionsGrid` has been re-constrained to ensure it is always centered vertically between the "Go back" button and the status text view.
+The `optionsGrid` position is now independent of the `btnGoBack` visibility, ensuring a stable UI layout.
 
 ## Changes
 
 ### Layout
 
 #### [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
-- Changed `app:layout_constraintTop_toBottomOf` for `optionsGrid` from `@id/tvKeyboardStatus` to `@id/btnGoBack`.
-- Added `app:layout_constraintBottom_toTopOf="@id/tvStatus"` to `optionsGrid`.
-- Updated `tvStatus`:
-    - Added `android:gravity="center"` to center the text.
-    - Updated `android:text` to `"Ready!"`.
-
-This creates a vertical constraint chain between `btnGoBack` and `tvStatus`, and because `optionsGrid` is the only element in that chain (or rather, constrained between them with `packed` style potentially influencing it, though here it just centers it in the available space), it will remain centered in the gap.
+- Updated `optionsGrid` constraints:
+    - Changed `app:layout_constraintTop_toBottomOf="@id/btnGoBack"` to `app:layout_constraintTop_toTopOf="parent"`.
+- This ensures that when `btnGoBack` is toggled between `visible` and `gone`, the `optionsGrid` does not shift vertically, as it no longer depends on the button's boundaries.
 
 ## Verification Results
 
 ### Manual Verification
-- The constraints now correctly reference `btnGoBack` (top) and `tvStatus` (bottom) while maintaining horizontal centering.
+- Verified that `optionsGrid` remains centered vertically relative to the entire parent container (bounded by the top and the `tvStatus` at the bottom), regardless of whether `btnGoBack` is visible or hidden.
