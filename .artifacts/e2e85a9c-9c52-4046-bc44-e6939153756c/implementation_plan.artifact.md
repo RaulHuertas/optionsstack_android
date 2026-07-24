@@ -1,83 +1,40 @@
-# Mirror UIOptions to UI Buttons (Optimized)
+# Move Nested Indicator to Right Center
 
-This plan implements a more efficient mirroring system in `MainActivity.kt` that uses a preallocated pool of `OptionButtonView` components instead of recreating them on every update.
+The goal is to move the `nestedIndicator` (">") from the left center to the right center of the `OptionButtonView`.
 
 ## Proposed Changes
 
-### [MainActivity](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
+### [app module](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app)
 
-#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
+#### [MODIFY] [view_option_button.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/view_option_button.xml)
 
-- **Initialization**:
-    - Add a `preallocateButtons()` method called in `onCreate` that creates 100 `OptionButtonView` instances, adds them to the `optionsGrid`, sets them to `View.GONE`, and stores them in `optionsButtons`.
-- **Mirroring Logic**:
-    - Update `mirrorOptions()`:
-        1. Get `currentOptions()` from `optionsStack`.
-        2. Iterate through `optionsButtons`.
-        3. For buttons at an index within `currentOptions.size`:
-            - Update text, shortcut, and click listener.
-            - Set visibility to `View.VISIBLE`.
-        4. For buttons at an index beyond `currentOptions.size`:
-            - Set visibility to `View.GONE`.
-        5. If `currentOptions.size` exceeds the current `optionsButtons.size`, dynamically create and add new buttons to the pool.
+- Change horizontal constraints for `nestedIndicator` to align with the end (right) of `buttonOption`.
+- Update margins accordingly.
 
-```kotlin
-    private fun preallocateButtons(count: Int = 100) {
-        repeat(count) {
-            val button = createOptionButton()
-            button.visibility = View.GONE
-            binding.optionsGrid.addView(button)
-            optionsButtons.add(button)
-        }
-    }
-
-    private fun createOptionButton(): OptionButtonView {
-        return OptionButtonView(this).apply {
-            layoutParams = android.widget.GridLayout.LayoutParams().apply {
-                width = resources.getDimensionPixelSize(R.dimen.option_button_width)
-                height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT
-            }
-        }
-    }
-
-    private fun mirrorOptions() {
-        val currentOptions = optionsStack.currentOptions()
-
-        // Expand pool if needed
-        while (optionsButtons.size < currentOptions.size) {
-            val button = createOptionButton()
-            binding.optionsGrid.addView(button)
-            optionsButtons.add(button)
-        }
-
-        optionsButtons.forEachIndexed { index, button ->
-            if (index < currentOptions.size) {
-                val uiOption = currentOptions[index]
-                button.apply {
-                    setOptionText(uiOption.getDisplayName())
-                    setShortcutText("[${optionsStack.shortcutAtIndex(index)}]")
-                    setOnClickListener {
-                        optionsStack.triggerOption(index)
-                        if (uiOption.isNested()) {
-                            mirrorOptions()
-                        }
-                    }
-                    visibility = View.VISIBLE
-                }
-            } else {
-                button.visibility = View.GONE
-            }
-        }
-    }
+```xml
+    <TextView
+        android:id="@+id/nestedIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="&gt;"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/buttonOption"
+        app:layout_constraintEnd_toEndOf="@id/buttonOption"
+        app:layout_constraintTop_toTopOf="@id/buttonOption"
+        tools:visibility="visible"
+        android:visibility="gone" />
 ```
+
+#### [MODIFY] [OptionButtonView.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/OptionButtonView.kt)
+
+- Add `setIsNested(isNested: Boolean)` to manage the indicator's visibility.
+- Ensure the indicator's colors are updated during inversion.
 
 ## Verification Plan
 
-### Automated Tests
-- Build the project.
-
 ### Manual Verification
-- Deploy the app.
-- Verify initial 3 options are visible.
-- Verify that triggering a sub-menu (if implemented in `UIOptions` data) updates the display without layout flickering.
-- Check Logcat/Status bar for execution messages.
+- Render the layout or run the app.
+- Programmatically set an option as "nested" and verify the `>` appears on the right side of the button.

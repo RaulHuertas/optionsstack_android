@@ -27,6 +27,12 @@ I have implemented the keyboard shortcut logic in `MainActivity.kt` using `UIOpt
 - **Navigation Support**: The UI now automatically refreshes whenever a shortcut is used to navigate into nested options.
 - Implemented `UIOptionExecuter` interface and linked it to the activity as its executer.
 
+### Layout Improvements
+- Moved `labelShortcut` in `view_option_button.xml` to the bottom-center of the button for better symmetry and readability.
+- Added a `nestedIndicator` (">") to `OptionButtonView` to visually identify options with sub-menus.
+- Positioned the `nestedIndicator` at the right center of the button.
+- Implemented `nested` state with `isNested()` and `setNested(Boolean)` in `OptionButtonView.kt`. Setting `nested` to true automatically shows the indicator.
+
 ### Layout (activity_main.xml)
 - Added a `tvStatus` TextView at the bottom of the screen to serve as a status bar.
 - Repositioned the "Add Dynamic" button to sit above the new status bar.

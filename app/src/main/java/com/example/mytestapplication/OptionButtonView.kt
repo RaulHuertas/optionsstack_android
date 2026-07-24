@@ -21,6 +21,7 @@ class OptionButtonView @JvmOverloads constructor(
     private var optionBackgroundColor: Int = Color.WHITE
     private var optionTextColor: Int = Color.BLACK
 
+    private var nested = false
     private var isCurrentlyInverted = false
 
     init {
@@ -45,8 +46,10 @@ class OptionButtonView @JvmOverloads constructor(
     private fun applyColors() {
         binding.buttonOption.setTextColor(optionTextColor)
         binding.labelShortcut.setTextColor(optionTextColor)
+        binding.nestedIndicator.setTextColor(optionTextColor)
         ViewCompat.setBackgroundTintList(binding.buttonOption, ColorStateList.valueOf(optionBackgroundColor))
         ViewCompat.setBackgroundTintList(binding.labelShortcut, ColorStateList.valueOf(optionBackgroundColor))
+        ViewCompat.setBackgroundTintList(binding.nestedIndicator, ColorStateList.valueOf(optionBackgroundColor))
     }
 
     fun getOptionBackgroundColor(): Int = optionBackgroundColor
@@ -77,6 +80,13 @@ class OptionButtonView @JvmOverloads constructor(
         updateContentDescription()
     }
 
+    fun isNested(): Boolean = nested
+
+    fun setNested(nested: Boolean) {
+        this.nested = nested
+        binding.nestedIndicator.visibility = if (nested) VISIBLE else GONE
+    }
+
     private fun updateContentDescription() {
         val optionText = binding.buttonOption.text ?: ""
         val shortcutText = binding.labelShortcut.text ?: ""
@@ -104,8 +114,10 @@ class OptionButtonView @JvmOverloads constructor(
 
         binding.buttonOption.setTextColor(invertedText)
         binding.labelShortcut.setTextColor(invertedText)
+        binding.nestedIndicator.setTextColor(invertedText)
         ViewCompat.setBackgroundTintList(binding.buttonOption, ColorStateList.valueOf(invertedBg))
         ViewCompat.setBackgroundTintList(binding.labelShortcut, ColorStateList.valueOf(invertedBg))
+        ViewCompat.setBackgroundTintList(binding.nestedIndicator, ColorStateList.valueOf(invertedBg))
     }
 
     private fun invertColor(color: Int): Int {

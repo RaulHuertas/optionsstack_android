@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
                             mirrorOptions()
                         }
                     }
+                    setNested(uiOption.isNested())
                     visibility = View.VISIBLE
                 }
             } else {

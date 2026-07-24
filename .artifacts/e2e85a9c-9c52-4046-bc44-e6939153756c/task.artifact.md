@@ -22,3 +22,7 @@
     - [x] Preallocate 100 `OptionButtonView` instances
     - [x] Implement `mirrorOptions` using visibility toggling
     - [x] Auto-refresh UI on shortcut navigation
+- [x] Move `labelShortcut` to bottom center in `view_option_button.xml`
+- [x] Add `nestedIndicator` label to `view_option_button.xml`
+- [x] Move `nestedIndicator` to right center and implement `setNested` in `OptionButtonView.kt`
+- [x] Formalize `nested` state with getter/setter in `OptionButtonView.kt`
