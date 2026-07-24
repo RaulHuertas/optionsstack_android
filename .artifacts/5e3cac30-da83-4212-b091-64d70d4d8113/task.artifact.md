@@ -1,0 +1,3 @@
+- [x] Update `activity_main.xml` to wrap `optionsGrid` in a `ScrollView`
+- [x] Verify the layout in `MainActivity.kt` (no changes expected, but check if `binding.optionsGrid` is still valid)
+- [x] Build and verify the scrollable behavior
