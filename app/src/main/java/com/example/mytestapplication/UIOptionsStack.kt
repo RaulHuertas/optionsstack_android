@@ -77,6 +77,12 @@ class UIOptionsStack {
         }
     }
 
+    fun goBack() {
+        if (stackPositions.isNotEmpty()) {
+            stackPositions.removeAt(stackPositions.size - 1)
+        }
+    }
+
     fun shortcutAtIndex(index:Int ): String {
         return shortcuts[index]
     }

@@ -26,3 +26,7 @@
 - [x] Add `nestedIndicator` label to `view_option_button.xml`
 - [x] Move `nestedIndicator` to right center and implement `setNested` in `OptionButtonView.kt`
 - [x] Formalize `nested` state with getter/setter in `OptionButtonView.kt`
+- [x] Add `goBack` method to `UIOptionsStack.kt`
+- [x] Handle `ESC` and `BACKSPACE` for back navigation in `MainActivity.kt`
+- [x] Add "Go back" button next to "Add Dynamic" in `activity_main.xml`
+- [x] Toggle "Go back" visibility in `mirrorOptions()` based on `currentLevel`

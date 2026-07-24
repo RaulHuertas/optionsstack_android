@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
         binding.optionA.visibility = View.GONE
         binding.optionB.visibility = View.GONE
 
-        binding.btnAddDynamic.setOnClickListener {
-            addDynamicOption()
+        binding.btnGoBack.setOnClickListener {
+            goBackInOptions()
         }
 
         //Keyboard presence status
@@ -111,8 +111,14 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
         }
     }
 
+    private fun goBackInOptions(){
+        optionsStack.goBack()
+        mirrorOptions()
+    }
     private fun mirrorOptions() {
         val currentOptions = optionsStack.currentOptions()
+
+        binding.btnGoBack.visibility = if (optionsStack.currentLevel() > 0) View.VISIBLE else View.GONE
 
         // Expand pool if needed
         while (optionsButtons.size < currentOptions.size) {
@@ -173,7 +179,10 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-
+        if (keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_DEL) {
+            goBackInOptions()
+            return true
+        }
         event?.let {
             val unicodeChar = it.getUnicodeChar(it.metaState)
             if (unicodeChar != 0) {
@@ -187,7 +196,6 @@ class MainActivity : AppCompatActivity(), UIOptionExecuter {
             }
         }
         return super.onKeyUp(keyCode, event)
-
         /*
         return when (keyCode) {
             KeyEvent.KEYCODE_R -> {

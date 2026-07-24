@@ -1,40 +1,29 @@
-# Move Nested Indicator to Right Center
+# Add "Go back" Button to UI
 
-The goal is to move the `nestedIndicator` (">") from the left center to the right center of the `OptionButtonView`.
+This plan describes adding a "Go back" button to the main screen, positioned next to the "Add Dynamic" button. This button will provide a visual way to navigate back through the options hierarchy.
 
 ## Proposed Changes
 
-### [app module](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app)
+### [Layout](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
 
-#### [MODIFY] [view_option_button.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/view_option_button.xml)
+#### [MODIFY] [activity_main.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/layout/activity_main.xml)
 
-- Change horizontal constraints for `nestedIndicator` to align with the end (right) of `buttonOption`.
-- Update margins accordingly.
+- Add a new `Button` with id `btnGoBack`.
+- Use a horizontal chain to position `btnGoBack` and `btnAddDynamic` side-by-side.
+- Set initial visibility of `btnGoBack` to `gone`.
 
-```xml
-    <TextView
-        android:id="@+id/nestedIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="&gt;"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="@id/buttonOption"
-        app:layout_constraintEnd_toEndOf="@id/buttonOption"
-        app:layout_constraintTop_toTopOf="@id/buttonOption"
-        tools:visibility="visible"
-        android:visibility="gone" />
-```
+### [MainActivity](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
 
-#### [MODIFY] [OptionButtonView.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/OptionButtonView.kt)
+#### [MODIFY] [MainActivity.kt](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/MainActivity.kt)
 
-- Add `setIsNested(isNested: Boolean)` to manage the indicator's visibility.
-- Ensure the indicator's colors are updated during inversion.
+- In `onCreate`, set the `onClickListener` for `btnGoBack` to call `optionsStack.goBack()` and `mirrorOptions()`.
+- In `mirrorOptions()`, update the visibility of `btnGoBack` based on `optionsStack.currentLevel() > 0`.
 
 ## Verification Plan
 
 ### Manual Verification
-- Render the layout or run the app.
-- Programmatically set an option as "nested" and verify the `>` appears on the right side of the button.
+1.  Deploy the app.
+2.  Verify only "Add Dynamic" is visible on the home screen.
+3.  Navigate into a nested menu (e.g., "Action C").
+4.  Verify that the "Go back" button appears.
+5.  Click the "Go back" button and verify the UI returns to the parent menu and the button disappears.

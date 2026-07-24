@@ -10,6 +10,9 @@ I have implemented the keyboard shortcut logic in `MainActivity.kt` using `UIOpt
 - Added `options` property with `getOptions()` and `setOptions()` methods.
 - Fixed `stackPositions` to be a `MutableList` for hierarchy tracking.
 - Fixed `triggerOption` to correctly check bounds, trigger the appropriate option at the current depth, and navigate into nested sub-options.
+- Added `goBack()` method to allow navigating up one level in the options hierarchy.
+- **Back Navigation**: `MainActivity` now handles `ESC` and `BACKSPACE` keys to trigger `optionsStack.goBack()`, allowing users to navigate back up from nested menus.
+- **"Go back" UI Button**: Added a physical "Go back" button next to "Add Dynamic". Its visibility is automatically managed—it only appears when the user is navigated into a sub-menu.
 - Cleaned up redundant `level()` method in favor of `currentLevel()`.
 
 ### [UIOptions](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/java/com/example/mytestapplication/UIOptions.kt)
