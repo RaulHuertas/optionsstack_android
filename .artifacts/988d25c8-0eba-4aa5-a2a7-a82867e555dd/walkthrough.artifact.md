@@ -1,23 +1,38 @@
-# Walkthrough - Full-Bleed Application Icons from logo.jpg
+# Walkthrough - Total Full-Bleed Application Icons
 
-I have re-generated all application icons to use the full-bleed style, where `logo.jpg` expands to fill the entire icon area.
+I have updated the application icons to use a total full-bleed effect, where `images/logo.jpg` completely fills both the background and foreground layers of the adaptive icon.
 
 ## Changes Made
 
-### Full-Bleed Asset Generation
-I used ImageMagick with a "resize and crop" strategy to ensure the image covers 100% of the icon area for every density:
-- **Legacy Icons**: 48dp to 192dp range, all square and filled.
-- **Adaptive Foreground**: 108dp to 432dp range, all square and filled.
+### Icon Asset Generation
+I generated full-bleed PNGs from `images/logo.jpg` for all densities:
+- **Background Icons** (`ic_launcher_background.png`): 108dp baseline, resized to fill the entire square.
+- **Foreground Icons** (`ic_launcher_foreground.png`): 108dp baseline, resized to fill the entire square.
+- **Legacy Icons** (`ic_launcher.png`, `ic_launcher_round.png`): 48dp baseline, resized to fill the entire square.
 
-### Verification Results
+### Adaptive Icon XML Updates
+I updated the XML definitions to point to these new assets:
+- [ic_launcher.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml)
+- [ic_launcher_round.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml)
 
-#### Dimensions Verification
-I verified that the output files are exactly the required sizes and in PNG format.
-- `xhdpi/ic_launcher.png`: 96x96 px (Full-bleed)
-- `xhdpi/ic_launcher_foreground.png`: 216x216 px (Full-bleed)
+Both files now use:
+```xml
+<adaptive-icon ...>
+    <background android:drawable="@mipmap/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    <monochrome android:drawable="@mipmap/ic_launcher_foreground" />
+</adaptive-icon>
+```
+
+## Verification Results
+
+### Dimensions Verification
+I verified that the background and foreground assets are the same size and are correctly formatted PNGs.
+- `xhdpi/ic_launcher_background.png`: 216x216 px
+- `xhdpi/ic_launcher_foreground.png`: 216x216 px
 
 > [!IMPORTANT]
-> **Mask Clipping**: Because the adaptive foreground layer (108x108 dp) is now full-bleed, the system mask (circle, squircle, etc.) will clip the outer edges of your logo. This is the intended "full-bleed" behavior.
+> **Visual Effect**: By using the same full-bleed image for both layers, the icon will appear as a single, fully-expanded image. On some launchers, the background and foreground may move slightly relative to each other (parallax effect) when the user interacts with the icon.
 
-> [!TIP]
-> All assets are in **PNG** format as requested. Legacy `.webp` files were previously removed and have not been recreated.
+> [!NOTE]
+> All legacy `.webp` files remain removed, and the project is fully using the new **PNG** assets.

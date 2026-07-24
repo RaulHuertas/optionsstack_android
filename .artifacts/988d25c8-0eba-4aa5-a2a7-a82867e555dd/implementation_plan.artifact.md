@@ -1,22 +1,14 @@
-# Implementation Plan - Full-Bleed Application Icons from logo.jpg
+# Implementation Plan - Total Full-Bleed Application Icons
 
-The goal is to re-generate the application icons so that the source image `logo.jpg` expands to occupy the entire area of each icon (full-bleed), without any margins or padding.
+The goal is to update the adaptive icon definitions so that `logo.jpg` completely fills both the background and foreground layers, ensuring the image "expands completely" and covers the entire icon area regardless of the device's mask shape.
 
 ## Proposed Changes
 
-### Icon Assets Generation (Full-Bleed)
+### Icon Assets Generation
 
-I will use ImageMagick (`magick`) with the "resize and crop to fill" strategy (`-resize "XxY^" -gravity center -extent XxY`) to ensure the target squares are completely covered by the image.
+I will use ImageMagick to ensure we have high-quality, full-bleed PNGs for both the background and foreground of the adaptive icon.
 
-#### Legacy Launcher Icons (`ic_launcher.png` and `ic_launcher_round.png`)
-Targeting `app/src/main/res/mipmap-<density>/`:
-- **mdpi**: 48x48 px
-- **hdpi**: 72x72 px
-- **xhdpi**: 96x96 px
-- **xxhdpi**: 144x144 px
-- **xxxhdpi**: 192x192 px
-
-#### Adaptive Icon Foreground (`ic_launcher_foreground.png`)
+#### Full-Bleed Background Icons (`ic_launcher_background.png`)
 Targeting `app/src/main/res/mipmap-<density>/`:
 - **mdpi**: 108x108 px
 - **hdpi**: 162x162 px
@@ -24,11 +16,28 @@ Targeting `app/src/main/res/mipmap-<density>/`:
 - **xxhdpi**: 324x324 px
 - **xxxhdpi**: 432x432 px
 
-> [!WARNING]
-> **Adaptive Icon Clipping**: Expanding the image to fill the entire 108x108 dp foreground layer means the edges of the image will be clipped by the Android system's icon mask (e.g., the corners of the squircle or the edges of the circle). This is the expected result of "occupying all of the image".
+#### Full-Bleed Foreground Icons (`ic_launcher_foreground.png`)
+(Re-confirming or re-generating the existing ones to match the "completely expanded" requirement)
+- Same dimensions as above.
 
-### Verification Plan
+### Resource Configuration
 
-#### Manual Verification
-- I will use `magick identify` to confirm the dimensions and verify that the files are PNG format.
-- I will check the file list to ensure no other formats (like `.webp`) are present.
+#### [MODIFY] [ic_launcher.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml)
+Update to use the new `@mipmap` assets for both layers.
+
+```xml
+<adaptive-icon ...>
+    <background android:drawable="@mipmap/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    <monochrome android:drawable="@mipmap/ic_launcher_foreground" />
+</adaptive-icon>
+```
+
+#### [MODIFY] [ic_launcher_round.xml](file:///C:/Users/User/AndroidStudioProjects/MyTestApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml)
+Apply the same changes as above.
+
+## Verification Plan
+
+### Manual Verification
+- I will verify the generated file dimensions with `magick identify`.
+- I will confirm the XML files correctly point to the `@mipmap` resources.
