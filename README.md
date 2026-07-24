@@ -1,4 +1,4 @@
-# MyTestApplication
+# Keyboard and Mouse Navigation Demo
 
 This is an example of how to create a UI that can be navigated with a keyboard and a touch display as well.
 

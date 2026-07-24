@@ -1,0 +1,4 @@
+- [x] Update `app_name` in `strings.xml`
+- [x] Update `rootProject.name` in `settings.gradle.kts`
+- [x] Update title in `README.md`
+- [x] Verify changes (Gradle sync and build)

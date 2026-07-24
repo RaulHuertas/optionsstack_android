@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MyTestApplication"
+rootProject.name = "Keyboard and Mouse Navigation Demo"
 include(":app")
